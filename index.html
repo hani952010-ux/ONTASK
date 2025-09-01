@@ -1,0 +1,39 @@
+\
+    {% extends "base.html" %}
+    {% block content %}
+    <form class="search" method="get" action="/">
+      <input type="text" name="q" placeholder="{{ _('أدخل رقم التتبع') }} / Enter tracking number" value="{{ q }}">
+      <button type="submit">{{ _('تتبع') }} / Track</button>
+    </form>
+
+    {% if shipment %}
+      <div class="card">
+        <h2>{{ _('نتيجة البحث') }} / Result</h2>
+        <p><strong>{{ _('رقم التتبع') }} / Tracking:</strong> <a href="{{ url_for('track', tracking=shipment['tracking']) }}">{{ shipment['tracking'] }}</a></p>
+        <p><strong>{{ _('العميل') }} / Customer:</strong> {{ shipment['customer'] }}</p>
+        <p><strong>{{ _('الناقل') }} / Carrier:</strong> {{ shipment['carrier'] }}</p>
+        <p><strong>{{ _('المنشأ') }} / Origin:</strong> {{ shipment['origin'] }}</p>
+        <p><strong>{{ _('الوجهة') }} / Destination:</strong> {{ shipment['destination'] }}</p>
+        <p><strong>{{ _('الحالة') }} / Status:</strong> {{ shipment['status'] }}</p>
+        <p><strong>{{ _('آخر تحديث') }} / Updated:</strong> {{ shipment['updated_at'] }}</p>
+      </div>
+
+      {% if events %}
+      <div class="card">
+        <h3>{{ _('الخط الزمني') }} / Timeline</h3>
+        <ol class="timeline">
+          {% for e in events %}
+            <li>
+              <div class="ts">{{ e['ts'] }}</div>
+              <div class="line">
+                <div class="status">{{ e['status'] }}</div>
+                <div class="meta">{{ e['location'] }}</div>
+                {% if e['note'] %}<div class="note">{{ e['note'] }}</div>{% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ol>
+      </div>
+      {% endif %}
+    {% endif %}
+    {% endblock %}

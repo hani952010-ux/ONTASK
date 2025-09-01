@@ -1,0 +1,63 @@
+\
+    {% extends "base.html" %}
+    {% block content %}
+    {% if view == "login" %}
+      <form class="card" method="post">
+        <h2>{{ _('تسجيل دخول الإدارة') }} / Admin login</h2>
+        <input type="password" name="password" placeholder="{{ _('كلمة المرور') }} / Password">
+        <button type="submit">{{ _('دخول') }} / Login</button>
+      </form>
+    {% else %}
+      <div class="card">
+        <h2>{{ _('لوحة الإدارة') }} / Admin Panel</h2>
+        <a class="logout" href="{{ url_for('admin_logout') }}">{{ _('تسجيل خروج') }} / Logout</a>
+
+        <h3>{{ _('إنشاء/تحديث شحنة') }} / Create or Update Shipment</h3>
+        <form method="post">
+          <input type="hidden" name="action" value="create_or_update">
+          <input type="text" name="tracking" placeholder="{{ _('رقم التتبع') }} / Tracking" required>
+          <input type="text" name="customer" placeholder="{{ _('العميل') }} / Customer">
+          <input type="text" name="carrier" placeholder="{{ _('الناقل') }} / Carrier">
+          <input type="text" name="origin" placeholder="{{ _('المنشأ') }} / Origin">
+          <input type="text" name="destination" placeholder="{{ _('الوجهة') }} / Destination">
+          <input type="text" name="status" placeholder="{{ _('الحالة') }} / Status">
+          <button type="submit">{{ _('حفظ') }} / Save</button>
+        </form>
+
+        <h3>{{ _('إضافة حدث للخط الزمني') }} / Add Timeline Event</h3>
+        <form method="post">
+          <input type="hidden" name="action" value="add_event">
+          <input type="text" name="tracking_e" placeholder="{{ _('رقم التتبع') }} / Tracking" required>
+          <input type="text" name="status_e" placeholder="{{ _('الحالة') }} / Status" required>
+          <input type="text" name="location_e" placeholder="{{ _('الموقع') }} / Location">
+          <input type="text" name="note_e" placeholder="{{ _('ملاحظة') }} / Note">
+          <input type="text" name="ts_e" placeholder="{{ _('تاريخ/وقت (UTC) اختياري') }} / Timestamp (UTC, optional)">
+          <button type="submit">{{ _('إضافة') }} / Add</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>{{ _('كل الشحنات') }} / All Shipments</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{{ _('التتبع') }} / Tracking</th>
+              <th>{{ _('العميل') }} / Customer</th>
+              <th>{{ _('الحالة') }} / Status</th>
+              <th>{{ _('آخر تحديث') }} / Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in shipments %}
+              <tr>
+                <td><a href="{{ url_for('track', tracking=s['tracking']) }}">{{ s['tracking'] }}</a></td>
+                <td>{{ s['customer'] }}</td>
+                <td>{{ s['status'] }}</td>
+                <td>{{ s['updated_at'] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+    {% endblock %}

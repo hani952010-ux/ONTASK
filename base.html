@@ -1,0 +1,32 @@
+\
+    <!doctype html>
+    <html lang="{{ 'ar' if get_locale()=='ar' else 'en' }}" dir="{{ 'rtl' if get_locale()=='ar' else 'ltr' }}">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>{{ _('تتبع الشحنات') }} / Shipment Tracker</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+      <header class="container">
+        <h1>{{ _('تتبع الشحنات') }} / Shipment Tracker</h1>
+        <nav class="lang">
+          <a href="{{ request.path }}?lang=ar">العربية</a> |
+          <a href="{{ request.path }}?lang=en">English</a>
+        </nav>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash">
+            {% for m in messages %}<div class="msg">{{ m }}</div>{% endfor %}
+          </div>
+        {% endif %}
+        {% endwith %}
+      </header>
+      <main class="container">
+        {% block content %}{% endblock %}
+      </main>
+      <footer class="container">
+        <p>&copy; 2025 — Simple Shipment Tracker</p>
+      </footer>
+    </body>
+    </html>
